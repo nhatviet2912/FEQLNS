@@ -1,0 +1,131 @@
+<!-- begin: content -->
+<div class="main-content">
+    <div class="page__title">
+        <h4>QUẢN LÝ PHÒNG BAN</h4>
+    </div>
+
+    <section class="firts-section">
+        <div class="training">
+            <div class="table__card">
+                <div class="manager__container">
+                    <div class="add__btn">
+                        <a class="btn btn--success" (click) ="showModalDepartment()"><i class="fa-solid fa-plus"></i>Thêm chuyên ngành</a>
+                    </div>
+                </div>
+
+                <div class="manager__container control-data">
+                    <div class="select__data-lenght">
+                        <label>Hiển thị 
+                            <select class="form-control">
+                                <option value="10">10</option>
+                                <option value="25">25</option>
+                                <option value="50">50</option>
+                                <option value="100">100</option>
+                            </select> bản ghi
+                        </label>
+                    </div>
+
+                    <div class="filter__data">
+                        <label>Tìm kiếm:<input type="search" class="form-control" placeholder="" aria-controls="DataTables_Table_0"></label>
+                    </div>
+                </div>
+
+                <div class="manager__container table-data">
+                    <table class="table table__data">
+                        <thead>
+                            <tr class="table__data-tr">
+                                <th class="table__data-th obj__id" rowspan="1" colspan="1">Mã chuyên ngành</th>
+                                <th class="table__data-th obj__name" rowspan="1" colspan="1">Tên chuyên ngành</th>
+                                <th class="table__data-th obj__status" rowspan="1" colspan="1">Tình trạng</th>
+                                <th class="table__data-th obj__des" rowspan="1" colspan="1">Mô tả</th>
+                                <th class="table__data-th obj__act" rowspan="1" colspan="1">Thao tác</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let item of fomartDataApi" class="table__data-tr">
+                                <td class="table__data-td">{{item.Id}}</td>
+                                <td class="table__data-td">{{item.DepartmentCode}}</td>
+                                <td class="table__data-td">{{item.DepartmentName}}</td>
+                                <td class="table__data-td">{{item.Description}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+<!-- end: content -->
+
+<!-- begin: modal -->
+<div class="manager__modal">
+    <!-- begin: modal-content -->
+    <div class="manager__modal-content">
+        <div class="manager__container modal__header">
+            <div class="manager__modal-title">
+                <h5>Nhập Thông Tin Chuyên Ngành</h5>
+            </div>
+
+            <div class="manager__modal-close" (click) = "closeModalDepartment()">
+                <i class="fas fa-times"></i>
+            </div>
+        </div>
+
+        <div class="manager__container modal__body">
+            <form class="form" action="#">
+                <div class="form__item">
+                    <label class="form__label">Mã chuyên ngành</label>
+                    <input type="text" class="form__input form__input-id form__input-disable" required placeholder="" disabled>
+                </div>
+                <div class="form__item">
+                    <label class="form__label">Tên chuyên ngành</label>
+                    <input type="text" class="form__input form__input-name" placeholder="Nhập tên chuyên ngành">
+                </div>
+                <div class="form__item">
+                    <label class="form__label">Tình trạng</label>
+
+
+                    <div class="input__select">
+                        <input type="text" class="form__input form__input-status" disabled>
+                        <div class="input__select-value form__input-select"></div>
+                        <div class="input__select-icon">
+                            <i class="fas fa-chevron-up"></i>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="input__list-option">
+                            <div class="input__option"><span>Hoạt động</span></div>
+                            <div class="input__option"><span>Ngừng hoạt Động</span></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form__item">
+                    <label class="form__label">Mô tả</label>
+                    <input type="text" class="form__input form__input-desc form__input--desc" placeholder="Nhập mô tả">
+                </div>
+                <button class="btn btn--primary btn--submit" type="submit">Xác nhận</button>
+                <button class="btn btn--primary btn--update" type="submit" onclick="editTraining()">Cập nhật</button>
+            </form>
+            <input class="get-index" type="hidden" value="">
+        </div>
+    </div>
+    <!-- end: modal-content -->
+
+    <!-- begin: alert-validate -->
+    <div class="manager__modal-alert">
+        <div class="manager__modal-alert__item alert--danger__case00">
+            <div class="alert__item-icon alert--danger">
+                <i class="far fa-exclamation-circle"></i>
+            </div>
+            <div class="alert__item-content">
+                <p>Tên chuyên ngành không được để trống, thử lại</p>
+            </div>
+            <div class="alert__item-close">
+                <i class="fal fa-times"></i>
+            </div>
+        </div>
+    </div>
+    <!-- end: alert-validate -->
+</div>
+<!-- end: modal -->
+
+
