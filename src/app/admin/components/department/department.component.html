@@ -9,7 +9,7 @@
             <div class="table__card">
                 <div class="manager__container">
                     <div class="add__btn">
-                        <a class="btn btn--success" (click) ="showModalDepartment()"><i class="fa-solid fa-plus"></i>Thêm chuyên ngành</a>
+                        <a class="btn btn--success" (click) ="showModalDepartment('create')"><i class="fa-solid fa-plus"></i>Thêm Phòng ban</a>
                     </div>
                 </div>
 
@@ -34,19 +34,22 @@
                     <table class="table table__data">
                         <thead>
                             <tr class="table__data-tr">
-                                <th class="table__data-th obj__id" rowspan="1" colspan="1">Mã chuyên ngành</th>
-                                <th class="table__data-th obj__name" rowspan="1" colspan="1">Tên chuyên ngành</th>
-                                <th class="table__data-th obj__status" rowspan="1" colspan="1">Tình trạng</th>
+                                <th class="table__data-th obj__id" rowspan="1" colspan="1">Mã Phòng ban</th>
+                                <th class="table__data-th obj__name" rowspan="1" colspan="1">Tên Phòng ban</th>
                                 <th class="table__data-th obj__des" rowspan="1" colspan="1">Mô tả</th>
                                 <th class="table__data-th obj__act" rowspan="1" colspan="1">Thao tác</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr *ngFor="let item of fomartDataApi" class="table__data-tr">
-                                <td class="table__data-td">{{item.Id}}</td>
                                 <td class="table__data-td">{{item.DepartmentCode}}</td>
                                 <td class="table__data-td">{{item.DepartmentName}}</td>
                                 <td class="table__data-td">{{item.Description}}</td>
+                                <td class="table__data-td">
+                                    <button class="edit__btn"  (click) ="editModalDepartment(item.Id)" style="background-color: transparent; border: none;"><i class="table__icon table__icon-edit fas fa-pen"></i></button>
+                                    <a class="delete__btn"  ><i class="table__icon table__icon-delete fas fa-trash"></i></a>
+                                    <a class="display__btn" ><i class="table__icon table__icon-display fas fa-user"></i></a>
+                                </td>
                             </tr>
                         </tbody>
                     </table>
@@ -63,7 +66,7 @@
     <div class="manager__modal-content">
         <div class="manager__container modal__header">
             <div class="manager__modal-title">
-                <h5>Nhập Thông Tin Chuyên Ngành</h5>
+                <h5>Nhập Thông Tin Phòng ban</h5>
             </div>
 
             <div class="manager__modal-close" (click) = "closeModalDepartment()">
@@ -72,38 +75,40 @@
         </div>
 
         <div class="manager__container modal__body">
-            <form class="form" action="#">
-                <div class="form__item">
-                    <label class="form__label">Mã chuyên ngành</label>
-                    <input type="text" class="form__input form__input-id form__input-disable" required placeholder="" disabled>
-                </div>
-                <div class="form__item">
-                    <label class="form__label">Tên chuyên ngành</label>
-                    <input type="text" class="form__input form__input-name" placeholder="Nhập tên chuyên ngành">
-                </div>
-                <div class="form__item">
-                    <label class="form__label">Tình trạng</label>
-
-
-                    <div class="input__select">
-                        <input type="text" class="form__input form__input-status" disabled>
-                        <div class="input__select-value form__input-select"></div>
-                        <div class="input__select-icon">
-                            <i class="fas fa-chevron-up"></i>
-                            <i class="fas fa-chevron-down"></i>
-                        </div>
-                        <div class="input__list-option">
-                            <div class="input__option"><span>Hoạt động</span></div>
-                            <div class="input__option"><span>Ngừng hoạt Động</span></div>
-                        </div>
+            <form class="form" action="#" >
+                <ng-container *ngIf="modalType === 'create'; else updateContent">
+                    <div class="form__item">
+                        <label class="form__label">Mã Phòng ban</label>
+                        <input type="text" class="form__input " name="DepartmentCode" required placeholder="" [(ngModel)]="DepartmentCode">
                     </div>
-                </div>
-                <div class="form__item">
-                    <label class="form__label">Mô tả</label>
-                    <input type="text" class="form__input form__input-desc form__input--desc" placeholder="Nhập mô tả">
-                </div>
-                <button class="btn btn--primary btn--submit" type="submit">Xác nhận</button>
-                <button class="btn btn--primary btn--update" type="submit" onclick="editTraining()">Cập nhật</button>
+                    <div class="form__item">
+                        <label class="form__label">Tên Phòng ban</label>
+                        <input type="text" class="form__input form__input-name" name="DepartmentName" placeholder="Nhập tên Phòng ban" [(ngModel)]="DepartmentName">
+                    </div>
+                    <div class="form__item">
+                        <label class="form__label">Mô tả</label>
+                        <input type="text" class="form__input form__input-desc form__input--desc" name="Description" placeholder="Nhập mô tả" [(ngModel)]="Description">
+                    </div>
+                </ng-container>
+                <ng-template #updateContent>
+                    <div class="form__item">
+                        <label class="form__label">Mã Phòng ban</label>
+                        <input type="text" class="form__input " name="DepartmentCode" required placeholder="" [(ngModel)]="fomartDataApiId.DepartmentCode">
+                    </div>
+                    <div class="form__item">
+                        <label class="form__label">Tên Phòng ban</label>
+                        <input type="text" class="form__input form__input-name" name="DepartmentName" placeholder="Nhập tên Phòng ban" [(ngModel)]="fomartDataApiId.DepartmentName">
+                    </div>
+                    <div class="form__item">
+                        <label class="form__label">Mô tả</label>
+                        <input type="text" class="form__input form__input-desc form__input--desc" name="Description" placeholder="Nhập mô tả" [(ngModel)]="fomartDataApiId.Description">
+                    </div>
+                </ng-template>
+                
+                
+                <button class="btn btn--primary btn--submit" type="submit" (click) ="submitForm()">
+                    {{ modalType === 'create' ? 'Xác nhận' : 'Cập nhật' }}
+                </button>
             </form>
             <input class="get-index" type="hidden" value="">
         </div>
@@ -117,7 +122,7 @@
                 <i class="far fa-exclamation-circle"></i>
             </div>
             <div class="alert__item-content">
-                <p>Tên chuyên ngành không được để trống, thử lại</p>
+                <p>Tên Phòng ban không được để trống, thử lại</p>
             </div>
             <div class="alert__item-close">
                 <i class="fal fa-times"></i>

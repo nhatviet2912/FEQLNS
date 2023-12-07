@@ -7,13 +7,26 @@ import { Observable } from 'rxjs';
 })
 export class DepartmentService {
 
-  constructor(private http : HttpClient) { }
+	constructor(private http : HttpClient) { }
 
-  getList() : Observable<any[]> {
-    return this.http.get<any>('http://localhost:3000/department');
-  }
+	private baseURL = `http://localhost:3000`;
 
-  postFile(request: any): Observable<any> {
-    return this.http.post('http://localhost:3000/employees/upload', request);
-  }
+	getList() : Observable<any[]> {
+		return this.http.get<any>(`${this.baseURL}/department`);
+	}
+
+	getById(id : number) : Observable<any> {
+		return this.http.get<any>(`${this.baseURL}/department/getById/${id}`);
+	}
+
+	postFile(request: any): Observable<any> {
+		return this.http.post('http://localhost:3000/employees/upload', request);
+	}
+	
+	postDepartment(request: any): Observable<any> {
+		return this.http.post(`${this.baseURL}/department/create`, request);
+	}
+
+
+
 }
