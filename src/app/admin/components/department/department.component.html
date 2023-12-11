@@ -7,9 +7,14 @@
     <section class="firts-section">
         <div class="training">
             <div class="table__card">
-                <div class="manager__container">
+                <div class="manager__container" style="justify-content: space-between;">
                     <div class="add__btn">
                         <a class="btn btn--success" (click) ="showModalDepartment('create')"><i class="fa-solid fa-plus"></i>Thêm Phòng ban</a>
+                    </div>
+                    <div class="add__btn" >
+                        <input #fileInput type="file" name="file " id="file" (change)="handleFileInput($event)" style="display: none">
+                        <a (click)="fileInput.click()" class="btn btn--success" style="margin-right: 24px;"><i class="fa-solid fa-plus"></i>Import File</a>
+                        <a class="btn btn--success" (click) ="exportDepartment()"><i class="fa-solid fa-plus"></i>Export File</a>
                     </div>
                 </div>
 
@@ -26,7 +31,7 @@
                     </div>
 
                     <div class="filter__data">
-                        <label>Tìm kiếm:<input type="search" class="form-control" placeholder="" aria-controls="DataTables_Table_0"></label>
+                        <label>Tìm kiếm:<input type="search" class="form-control" name="searchKeyWord" [(ngModel)]="searchKeyWord" (keyup)="searchDepartment()" placeholder="" aria-controls="DataTables_Table_0"></label>
                     </div>
                 </div>
 
@@ -44,11 +49,10 @@
                             <tr *ngFor="let item of fomartDataApi" class="table__data-tr">
                                 <td class="table__data-td">{{item.DepartmentCode}}</td>
                                 <td class="table__data-td">{{item.DepartmentName}}</td>
-                                <td class="table__data-td">{{item.Description}}</td>
+                                <td class="table__data-td">{{item.Descriptions}}</td>
                                 <td class="table__data-td">
                                     <button class="edit__btn"  (click) ="editModalDepartment(item.Id)" style="background-color: transparent; border: none;"><i class="table__icon table__icon-edit fas fa-pen"></i></button>
-                                    <a class="delete__btn"  ><i class="table__icon table__icon-delete fas fa-trash"></i></a>
-                                    <a class="display__btn" ><i class="table__icon table__icon-display fas fa-user"></i></a>
+                                    <a class="delete__btn"  (click) ="deleteDepartment(item.Id, item.DepartmentCode)"><i class="table__icon table__icon-delete fas fa-trash"></i></a>
                                 </td>
                             </tr>
                         </tbody>
@@ -87,7 +91,7 @@
                     </div>
                     <div class="form__item">
                         <label class="form__label">Mô tả</label>
-                        <input type="text" class="form__input form__input-desc form__input--desc" name="Description" placeholder="Nhập mô tả" [(ngModel)]="Description">
+                        <input type="text" class="form__input form__input-desc form__input--desc" name="Descriptions" placeholder="Nhập mô tả" [(ngModel)]="Descriptions">
                     </div>
                 </ng-container>
                 <ng-template #updateContent>
@@ -101,7 +105,7 @@
                     </div>
                     <div class="form__item">
                         <label class="form__label">Mô tả</label>
-                        <input type="text" class="form__input form__input-desc form__input--desc" name="Description" placeholder="Nhập mô tả" [(ngModel)]="fomartDataApiId.Description">
+                        <input type="text" class="form__input form__input-desc form__input--desc" name="Descriptions" placeholder="Nhập mô tả" [(ngModel)]="fomartDataApiId.Descriptions">
                     </div>
                 </ng-template>
                 
@@ -113,24 +117,42 @@
             <input class="get-index" type="hidden" value="">
         </div>
     </div>
-    <!-- end: modal-content -->
-
-    <!-- begin: alert-validate -->
-    <div class="manager__modal-alert">
-        <div class="manager__modal-alert__item alert--danger__case00">
-            <div class="alert__item-icon alert--danger">
-                <i class="far fa-exclamation-circle"></i>
-            </div>
-            <div class="alert__item-content">
-                <p>Tên Phòng ban không được để trống, thử lại</p>
-            </div>
-            <div class="alert__item-close">
-                <i class="fal fa-times"></i>
-            </div>
-        </div>
-    </div>
-    <!-- end: alert-validate -->
+    <!-- end: modal-content --> 
 </div>
 <!-- end: modal -->
 
+<!-- begin: alert-delete -->
+<div class="manager__alert" >
+    <div class="manager__alert-content" >
+        <div class="manager__container modal__header">
+            <div class="manager__modal-title">
+                <h5>THÔNG BÁO</h5>
+            </div>
+
+            <div class="manager__modal-close" (click) ="closeConfirmDialog()">
+                <i class="fas fa-times"></i>
+            </div>
+        </div>
+
+        <ng-container *ngIf="modelTypeMessage === 'delete'; else deleteContent">
+            <div class="manager__container alert__body">
+                <h6>Bạn có chức muốn xóa thông tin phòng ban có mã <span class="get-id-del">{{ departmentCode }}</span> khỏi hệ thống?</h6>
+                <div class="alert__btn manager_btn-confirm" >
+                    <button class="btn btn--error btn__agree" type="submit" (click)="deleteConfirm()">Xác nhận</button>
+                    <button class="btn btn--muted btn__skip" type="submit" (click) = closeConfirmDialog()>Bỏ qua</button>
+                </div>
+            </div>
+        </ng-container>
+        <ng-template #deleteContent>
+            <div class="manager__container alert__body">
+                <h6 >{{ message }}</h6>
+                <div class="alert__btn manager_btn-confirm" >
+                    <button class="btn btn--error btn__agree" (click) ="closeConfirmDialog()">Xác nhận</button>
+                </div>
+            </div>
+        </ng-template>
+        
+    </div>
+</div>
+<!-- end: alert-delete -->
 

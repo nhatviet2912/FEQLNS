@@ -502,6 +502,11 @@ table {
     margin-top: 16px;
 }
 
+.manager_btn-confirm {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
 
 /* #endregion */
 
