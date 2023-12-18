@@ -19,10 +19,6 @@ export class DepartmentService {
 		return this.http.get<any>(`${this.baseURL}/department/getById/${id}`);
 	}
 
-	postFile(request: any): Observable<any> {
-		return this.http.post('http://localhost:3000/employees/upload', request);
-	}
-	
 	postDepartment(request: any): Observable<any> {
 		return this.http.post(`${this.baseURL}/department/create`, request);
 	}
@@ -53,8 +49,4 @@ export class DepartmentService {
             responseType: 'arraybuffer'
         });
 	}
-
-	
-
-
 }

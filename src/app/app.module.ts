@@ -11,6 +11,8 @@ import { SidebarComponent } from './admin/shared/components/sidebar/sidebar.comp
 import { HeaderComponent } from './admin/shared/components/header/header.component';
 import { DashboardComponent } from './admin/components/dashboard/dashboard.component';
 import { DepartmentComponent } from './admin/components/department/department.component';
+import { PositionComponent } from './admin/components/position/position.component';
+import { EmployeeComponent } from './admin/components/employee/employee.component';
 
 @NgModule({
   declarations: [
@@ -20,6 +22,8 @@ import { DepartmentComponent } from './admin/components/department/department.co
     HeaderComponent,
     DashboardComponent,
     DepartmentComponent,
+    PositionComponent,
+    EmployeeComponent,
   ],
   imports: [
     BrowserModule,

@@ -27,7 +27,7 @@
 .navbar__brand {
     display: flex;
     align-items: center;
-    background: #11101b;
+    /* background: #11101b; */
     flex: 1;
     padding: 0 32px;
     height: 72px;
@@ -657,16 +657,6 @@ body {
     font-size: 8px;
 }
 
-.input__list-option {
-    display: none;
-    background-color: #495cba;
-    position: absolute;
-    top: 44px;
-    width: 100%;
-    height: 160px;
-    z-index: 5;
-    overflow-y: scroll;
-}
 
 .input__list-option.list-option__normal {
     height: auto;

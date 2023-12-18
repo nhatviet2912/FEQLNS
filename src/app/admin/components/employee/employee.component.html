@@ -1,0 +1,225 @@
+<!-- begin: content -->
+<div class="main-content">
+    <div class="page__title">
+        <h4>QUẢN LÝ NHÂN VIÊN</h4>
+    </div>
+
+    <section class="firts-section">
+        <div class="training">
+            <div class="table__card">
+                <div class="manager__container" style="justify-content: space-between;">
+                    <div class="add__btn">
+                        <a class="btn btn--success" (click) ="showModal('create')"><i class="fa-solid fa-plus"></i>Thêm nhân viên</a>
+                    </div>
+                    <div class="add__btn" >
+                        <input #fileInput type="file" name="file " id="file" (change)="handleFileInput($event)" style="display: none">
+                        <a (click)="fileInput.click()" class="btn btn--success" style="margin-right: 24px;"><i class="fa-solid fa-plus"></i>Import File</a>
+                        <a class="btn btn--success" (click) ="export()"><i class="fa-solid fa-plus"></i>Export File</a>
+                    </div>
+                </div>
+
+                <div class="manager__container control-data">
+                    <div class="select__data-lenght">
+                        <label>Hiển thị 
+                            <select class="form-control">
+                                <option value="10">10</option>
+                                <option value="25">25</option>
+                                <option value="50">50</option>
+                                <option value="100">100</option>
+                            </select> bản ghi
+                        </label>
+                    </div>
+
+                    <div class="filter__data">
+                        <label>Tìm kiếm:
+                            <input type="search" class="form-control" name="searchKeyWord" [(ngModel)]="searchKeyWord" (change)="search()" placeholder="" aria-controls="DataTables_Table_0">
+                        </label>
+                    </div>
+                </div>
+
+                <div class="manager__container table-data" style="overflow: auto;">
+                    <table class="table table__data">
+                        <thead>
+                            <tr class="table__data-tr">
+                                <th class="table__data-th obj__id" rowspan="1" colspan="1">Mã nhân viên</th>
+                                <th class="table__data-th obj__name" rowspan="1" colspan="1">Tên nhân viên</th>
+                                <th class="table__data-th obj__name" rowspan="1" colspan="1">Ngày sinh</th>
+                                <th class="table__data-th obj__name" rowspan="1" colspan="1">Giới tính</th>
+                                <th class="table__data-th obj__name" rowspan="1" colspan="1">Email</th>
+                                <th class="table__data-th obj__name" rowspan="1" colspan="1">Số điện thoại</th>
+                                <th class="table__data-th obj__des" rowspan="1" colspan="1">Địa chỉ</th>
+                                <th class="table__data-th obj__des" rowspan="1" colspan="1">Chức vụ</th>
+                                <th class="table__data-th obj__act" rowspan="1" colspan="1">Thao tác</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let item of fomartDataApi" class="table__data-tr" (dblclick)="editModal(item.Id)">
+                                <td class="table__data-td">{{item.EmployeeCode}}</td>
+                                <td class="table__data-td">{{item.EmployeeName}}</td>
+                                <td class="table__data-td">{{formatDate(item.DateOfBirth)}}</td>
+                                <td class="table__data-td">{{formatGender(item.Gender)}}</td>
+                                <td class="table__data-td">{{item.Email}}</td>
+                                <td class="table__data-td">{{item.PhoneNumber}}</td>
+                                <td class="table__data-td">{{item.Address}}</td>
+                                <td class="table__data-td">{{item.PositionName}}</td>
+                                <td class="table__data-td">
+                                    <button class="edit__btn"  (click) ="editModal(item.Id)" style="background-color: transparent; border: none;"><i class="table__icon table__icon-edit fas fa-pen"></i></button>
+                                    <a class="delete__btn"  (click) ="delete(item.Id, item.EmployeeCode)"><i class="table__icon table__icon-delete fas fa-trash"></i></a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+<!-- end: content -->
+
+<!-- begin: modal -->
+<div class="manager__modal">
+    <!-- begin: modal-content -->
+    <div class="manager__modal-content" style="overflow: auto;">
+        <div class="manager__container modal__header">
+            <div class="manager__modal-title">
+                <h5>Nhập Thông Tin Nhân Viên</h5>
+            </div>
+
+            <div class="manager__modal-close" (click) = "closeModal()">
+                <i class="fas fa-times"></i>
+            </div>
+        </div>
+
+        <div class="manager__container modal__body">
+            <form class="form" action="#" >
+                <ng-container *ngIf="modalType === 'create'; else updateContent">
+                    <div class="form__item">
+                        <label class="form__label">Mã nhân viên</label>
+                        <input type="text" class="form__input " name="EmployeeCode" required  [(ngModel)]="EmployeeCode">
+                    </div>
+                    <div class="form__item">
+                        <label class="form__label">Tên nhân viên</label>
+                        <input type="text" class="form__input form__input-name" name="EmployeeName"  [(ngModel)]="EmployeeName">
+                    </div>
+                    <div class="form__item">
+                        <label class="form__label">Ngày sinh</label>
+                        <input type="date" class="form__input form__input-desc form__input--desc" name="DateOfBirth"  [(ngModel)]="DateOfBirth">
+                    </div>
+                    <div class="form__item">
+                        <label class="form__label">Giới tính</label>
+                        <select class="form__input form__input-desc form__input--desc" name="Gender"   [(ngModel)]="Gender">
+                            <option value="0">Nữ</option>
+                            <option value="1">Nam</option>                       
+                        </select>
+                    </div>
+                    <div class="form__item">
+                        <label class="form__label">Email</label>
+                        <input type="text" class="form__input form__input-desc form__input--desc" name="Email" [(ngModel)]="Email">
+                    </div>
+                    <div class="form__item">
+                        <label class="form__label">Số điện thoại</label>
+                        <input type="text" class="form__input form__input-desc form__input--desc" name="PhoneNumber" [(ngModel)]="PhoneNumber">
+                    </div>
+                    <div class="form__item">
+                        <label class="form__label">Địa chỉ</label>
+                        <input type="text" class="form__input form__input-desc form__input--desc" name="Address" [(ngModel)]="Address">
+                    </div>
+                    <div class="form__item">
+                        <label class="form__label">Chức vụ</label>
+                        <select class="form__input form__input-desc form__input--desc" name="Position_id" [(ngModel)]="Position_id">
+                            <option class="input__select-value form__input-select" selected>Vui lòng chọn chứ vụ</option>
+                            <option *ngFor="let item of dataDropdown" [value]="item.Id">{{ item.PositionName }}</option>                       
+                        </select>
+                    </div>
+
+                </ng-container>
+                <ng-template #updateContent>
+                    <div class="form__item">
+                        <label class="form__label">Mã nhân viên</label>
+                        <input type="text" class="form__input " name="EmployeeCode" required  [(ngModel)]="fomartDataApiId.EmployeeCode">
+                    </div>
+                    <div class="form__item">
+                        <label class="form__label">Tên nhân viên</label>
+                        <input type="text" class="form__input form__input-name" name="EmployeeName"  [(ngModel)]="fomartDataApiId.EmployeeName">
+                    </div>
+                    <div class="form__item">
+                        <label class="form__label">Ngày sinh</label>
+                        <input type="date" class="form__input form__input-desc form__input--desc" name="DateOfBirth"  [(ngModel)]="fomartDataApiId.DateOfBirth">
+                    </div>
+                    <div class="form__item">
+                        <label class="form__label">Giới tính</label>
+                        <select class="form__input form__input-desc form__input--desc" name="Gender"   [(ngModel)]="fomartDataApiId.Gender">
+                            <option value="0">Nữ</option>
+                            <option value="1">Nam</option>                       
+                        </select>
+                    </div>
+                    <div class="form__item">
+                        <label class="form__label">Email</label>
+                        <input type="text" class="form__input form__input-desc form__input--desc" name="Email" [(ngModel)]="fomartDataApiId.Email">
+                    </div>
+                    <div class="form__item">
+                        <label class="form__label">Số điện thoại</label>
+                        <input type="text" class="form__input form__input-desc form__input--desc" name="PhoneNumber" [(ngModel)]="fomartDataApiId.PhoneNumber">
+                    </div>
+                    <div class="form__item">
+                        <label class="form__label">Địa chỉ</label>
+                        <input type="text" class="form__input form__input-desc form__input--desc" name="Address" [(ngModel)]="fomartDataApiId.Address">
+                    </div>
+                    <div class="form__item">
+                        <label class="form__label">Chức vụ</label>
+                        <select class="form__input form__input-desc form__input--desc" name="Position_id" [(ngModel)]="fomartDataApiId.Position_id">
+                            <option class="input__select-value form__input-select" selected>Vui lòng chọn chứ vụ</option>
+                            <option *ngFor="let item of dataDropdown" [value]="item.Id">{{ item.PositionName }}</option>                       
+                        </select>
+                    </div>
+                </ng-template>
+                
+                
+                <button class="btn btn--primary btn--submit" type="submit" (click) ="submitForm()">
+                    {{ modalType === 'create' ? 'Xác nhận' : 'Cập nhật' }}
+                </button>
+            </form>
+            <input class="get-index" type="hidden" value="">
+        </div>
+    </div>
+    <!-- end: modal-content --> 
+</div>
+<!-- end: modal -->
+
+<!-- begin: alert-delete -->
+<div class="manager__alert" >
+    <div class="manager__alert-content" >
+        <div class="manager__container modal__header">
+            <div class="manager__modal-title">
+                <h5>THÔNG BÁO</h5>
+            </div>
+
+            <div class="manager__modal-close" (click) ="closeConfirmDialog()">
+                <i class="fas fa-times"></i>
+            </div>
+        </div>
+
+        <ng-container *ngIf="modelTypeMessage === 'delete'; else deleteContent">
+            <div class="manager__container alert__body">
+                <h6>Bạn có chức muốn xóa thông tin nhân viên có mã <span class="get-id-del">{{ code }}</span> khỏi hệ thống?</h6>
+                <div class="alert__btn manager_btn-confirm" >
+                    <button class="btn btn--error btn__agree" type="submit" (click)="deleteConfirm()">Xác nhận</button>
+                    <button class="btn btn--muted btn__skip" type="submit" (click) = closeConfirmDialog()>Bỏ qua</button>
+                </div>
+            </div>
+        </ng-container>
+        <ng-template #deleteContent>
+            <div class="manager__container alert__body">
+                <h6 >{{ message }}</h6>
+                <div class="alert__btn manager_btn-confirm" >
+                    <button class="btn btn--error btn__agree" (click) ="closeConfirmDialog()">Xác nhận</button>
+                </div>
+            </div>
+        </ng-template>
+        
+    </div>
+</div>
+<!-- end: alert-delete -->
+
+
+

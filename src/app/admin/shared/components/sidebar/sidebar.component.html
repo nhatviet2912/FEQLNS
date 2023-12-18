@@ -2,77 +2,15 @@
 <div class="leftbar__wrap">
     <!-- leftbar -->
     <ul class="leftbar scroll-vertical" id="side-menu">
-        <li class="leftbar__title">Menu</li>
 
-        <li class="leftbar__item active">
-            <a href="#">
-                <i class="fas fa-chart-pie-alt"></i>
-                <p>Tổng quản</p>
+        <li *ngFor="let item of fakeData" class="leftbar__item">
+            <a routerLink="{{ item.path}}">
+                <i class="{{ item.icons}}"></i>
+                <p>{{ item.name}}</p>
             </a>
         </li>
 
-        <li class="leftbar__item">
-            <a href="training.html">
-                <i class="far fa-city"></i>
-                <p>Quản lý chuyên ngành</p>
-            </a>
-        </li>
-
-        <li class="leftbar__item">
-            <a href="generation.html">
-                <i class="fas fa-graduation-cap"></i>
-                <p>Quản lý hệ đào tạo</p>
-            </a>
-        </li>
-
-        <li class="leftbar__item">
-            <a href="class.html">
-                <i class="far fa-users-class"></i>
-                <p>Quản lý lớp học</p>
-            </a>
-        </li>
-
-        <li class="leftbar__item">
-            <a href="student.html">
-                <i class="fas fa-user-graduate"></i>
-                <p>Quản lý sinh viên</p>
-            </a>
-        </li>
-
-        <li class="leftbar__item">
-            <a href="teacher.html">
-                <i class="fad fa-chalkboard-teacher"></i>
-                <p>Quản lý giáo viên</p>
-            </a>
-        </li>
-
-        <li class="leftbar__item">
-            <a href="subject.html">
-                <i class="far fa-calculator-alt"></i>
-                <p>Quản lý môn học</p>
-            </a>
-        </li>
-
-        <li class="leftbar__item">
-            <a href="schedule.html">
-                <i class="far fa-calendar-alt"></i>
-                <p>Quản lý lịch học</p>
-            </a>
-        </li>
-
-        <li class="leftbar__item">
-            <a href="scores.html">
-                <i class="fas fa-book-open"></i>
-                <p>Quản lý điểm thi</p>
-            </a>
-        </li>
-
-        <li class="leftbar__item">
-            <a href="statistical.html">
-                <i class="far fa-chart-line"></i>
-                <p>Thống kê, báo cáo</p>
-            </a>
-        </li>
+        
 
         <li class="leftbar__title">Người dùng</li>
 

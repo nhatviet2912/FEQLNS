@@ -1,37 +1,44 @@
 import { Component, OnInit } from '@angular/core';
+import { PositionService } from '../../service/positionService/position.service';
 import { DepartmentService } from '../../service/departmentService/department.service';
 
 @Component({
-  selector: 'app-department',
-  templateUrl: './department.component.html',
-  styleUrls: ['./department.component.css', ]
+  selector: 'app-position',
+  templateUrl: './position.component.html',
+  styleUrls: ['./position.component.css']
 })
-export class DepartmentComponent implements OnInit {
-    constructor(private departmentService : DepartmentService) {}
-    dataDepartment: any = [];
+export class PositionComponent implements OnInit{
+    constructor(private positionService : PositionService, private departmentService: DepartmentService) {}
+    data: any = [];
     fomartDataApi: any = [];
-    dataDepartmentId: any = [];
+    dataId: any = [];
     fomartDataApiId: any = [];
-    DepartmentCode: string = '';
-    DepartmentName: string = '';
+    modelCode: string = '';
+    modelName: string = '';
     Descriptions: string ='';
     showModalFlag: boolean = false;
     modalType: 'create' | 'update' = 'create';
     modelTypeMessage: 'delete' | 'error' = 'delete';
     departmentId: number = 0;
-    departmentIdDelete: number = 0;
-    departmentCode: string | null = null;
+    IdDelete: number = 0;
+    code: string | null = null;
     message: string | null = null;
     searchKeyWord: string | null = null;
+    dataDropdown: any = [];
+    dropdown: any = [];
+    Department_id: any;
 
     ngOnInit(): void {
-        this.getAllDepartment();
+        this.getAll();
     }
 
+    
+
     //Show Modal
-    showModalDepartment(type: 'create' | 'update') {
+    showModal(type: 'create' | 'update') {
         document.querySelector('.manager__modal')?.classList.add('active');
         document.querySelector('.manager__modal-content')?.classList.add('scale-up-center');
+        this.getDropdown();
         this.modalType = type;
         if(type == 'create') {
             this.resetInput();
@@ -52,30 +59,30 @@ export class DepartmentComponent implements OnInit {
     }
 
     //Hide Modal
-    closeModalDepartment(){
+    closeModal(){
         document.querySelector('.manager__modal')?.classList.remove('active');
         document.querySelector('.manager__modal-content')?.classList.remove('scale-up-center');
     }
 
     //reset inpu Modal
     resetInput(){
-        this.DepartmentCode = '';
-        this.DepartmentName = '';
+        this.modelCode = '';
+        this.modelName = '';
         this.Descriptions = '';
     }
 
     //click edit
-    editModalDepartment(Id: number) {
-        this.showModalDepartment('update');
+    editModal(Id: number) {
+        this.showModal('update');
         this.getById(Id);
         console.log(this.fomartDataApiId);
     }
 
     //call api get all 
-    getAllDepartment() {
-        this.departmentService.getList().subscribe((res: any[]) => {
-            this.dataDepartment = res;
-            this.fomartDataApi = this.dataDepartment.data;
+    getAll() {
+        this.positionService.getList().subscribe((res: any[]) => {
+            this.data = res;
+            this.fomartDataApi = this.data.data;
             console.log(this.fomartDataApi);
             
         })
@@ -83,9 +90,9 @@ export class DepartmentComponent implements OnInit {
 
     //call api get by id
     getById(Id: number){
-        this.departmentService.getById(Id).subscribe(res => {
-            this.dataDepartmentId = res;
-            this.fomartDataApiId = this.dataDepartmentId.data;            
+        this.positionService.getById(Id).subscribe(res => {
+            this.dataId = res;
+            this.fomartDataApiId = this.dataId.data;            
         })
     }
 
@@ -93,27 +100,28 @@ export class DepartmentComponent implements OnInit {
     submitForm(){
         if (this.modalType === 'create') {
             // Thực hiện xử lý tạo mới
-            this.createDepartment();
+            this.create();
         } else {
             // Thực hiện xử lý cập nhật
-            this.updateDepartment();
+            this.update();
         }
         // Đóng modal sau khi tạo mới hoặc cập nhật
-        this.closeModalDepartment();
+        this.closeModal();
     }
 
     //call api create
-    createDepartment() {
+    create() {        
         
         let body = {
-            DepartmentCode : this.DepartmentCode,
-            DepartmentName: this.DepartmentName,
-            Descriptions: this.Descriptions
-        }
+            PositionCode : this.modelCode,
+            PositionName: this.modelName,
+            Descriptions: this.Descriptions,
+            Department_id: this.Department_id
+        }        
         
-        this.departmentService.postDepartment(body).subscribe((res) => {
-            this.closeModalDepartment();
-            this.getAllDepartment();
+        this.positionService.postPosition(body).subscribe((res) => {
+            this.closeModal();
+            this.getAll();
         }, (error) => {
             if(error.error){
                 this.showConfirmDialog('error')
@@ -124,16 +132,18 @@ export class DepartmentComponent implements OnInit {
     }
 
     //call api update
-    updateDepartment() {
+    update() {
         let body = {
-            DepartmentCode : this.fomartDataApiId.DepartmentCode,
-            DepartmentName: this.fomartDataApiId.DepartmentName,
-            Descriptions: this.fomartDataApiId.Descriptions
+            PositionCode : this.fomartDataApiId.PositionCode,
+            PositionName: this.fomartDataApiId.PositionName,
+            Descriptions: this.fomartDataApiId.Descriptions,
+            Department_id: this.fomartDataApiId.Department_id
+
         }
         let id = this.fomartDataApiId.Id;
         
-        this.departmentService.putDepartment(id, body).subscribe((res) => {
-            this.getAllDepartment();            
+        this.positionService.putPosition(id, body).subscribe((res) => {
+            this.getAll();            
         }, (err) => {
             if(err.error){
                 this.showConfirmDialog('error')
@@ -143,18 +153,18 @@ export class DepartmentComponent implements OnInit {
     }
     
     //click delete
-    deleteDepartment(Id: number, Code: string){
+    delete(Id: number, Code: string){
         this.showConfirmDialog('delete')
-        this.departmentIdDelete = Id;
-        this.departmentCode = Code;
+        this.IdDelete = Id;
+        this.code = Code;
         
     }
 
     //call api delete
     deleteConfirm() {        
-        this.departmentService.delelte(this.departmentIdDelete).subscribe((res) => {
+        this.positionService.delete(this.IdDelete).subscribe((res) => {
             if(res.message == "success"){
-                this.getAllDepartment();
+                this.getAll();
                 this.closeConfirmDialog();
             }
         }, (err) => {
@@ -172,25 +182,35 @@ export class DepartmentComponent implements OnInit {
         const formData = new FormData();
         formData.append('file', files[0]);
         
-        this.departmentService.importDepartment(formData).subscribe((res) => {
-            this.getAllDepartment();
+        this.positionService.importPosition(formData).subscribe((res) => {
+            this.getAll();
         });
     }
 
     //export file
-    exportDepartment(){
-        this.departmentService.exportDepartments().subscribe((res) => {
-            this.downloadFile(res, 'department.xlsx');  
+    export(){
+        this.positionService.exportPosition().subscribe((res) => {
+            this.downloadFile(res, 'position.xlsx');  
         });      
     }
 
     //search
-    searchDepartment() {
+    search() {
         let body = {
             KeyWord: this.searchKeyWord
         }
-        this.departmentService.searchDepartment(body).subscribe((res) => {
+        this.positionService.searchPosition(body).subscribe((res) => {
             this.fomartDataApi = res.data;
+            
+        })
+    }
+
+    //get dropdown
+    getDropdown() {
+        this.departmentService.getList().subscribe(res => {
+            this.dropdown = res;
+            this.dataDropdown = this.dropdown.data;
+            console.log(this.dataDropdown);
             
         })
     }
