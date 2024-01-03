@@ -1,0 +1,71 @@
+
+<div class="main-content">
+    <div class="page__title">
+        <h4>QUẢN LÝ CHỨC VỤ</h4>
+    </div>
+
+    <section class="firts-section">
+        <div class="training">
+            <div class="table__card">
+                <div class="manager__container" style="justify-content: space-between;">
+                    <div class="add__btn">
+                        <a class="btn btn--success" (click)="onUpdateClick()" ><i class="fa-solid fa-plus"></i>Thêm Chức vụ</a>
+                    </div>
+                </div>
+
+                <div class="manager__container control-data">
+                    <div class="select__data-lenght">
+                        <label>Hiển thị 
+                            <select class="form-control">
+                                <option value="10">10</option>
+                                <option value="25">25</option>
+                                <option value="50">50</option>
+                                <option value="100">100</option>
+                            </select> bản ghi
+                        </label>
+                    </div>
+
+                    <div class="filter__data">
+                        <label>Tìm kiếm:
+                        </label>
+                    </div>
+                </div>
+
+                <div class="manager__container table-data"  style="overflow: auto;">
+                    <table class="table table__data">
+                        <thead>
+                            <tr class="table__data-tr">
+                                <th class="table__data-th obj__id" rowspan="1" colspan="1">STT</th>
+                                <th class="table__data-th obj__name" rowspan="1" colspan="1">Mã nhân viên</th>
+                                <th class="table__data-th obj__des" rowspan="1" colspan="1">Tên nhân viên</th>
+                                <ng-container *ngFor="let day of columnHeaders">
+                                    <th class="table__data-th obj__act" rowspan="1" colspan="1">{{ day }}</th>
+                                </ng-container>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let item of data; let i = index" class="table__data-tr">
+                                <td>{{i+1}}</td>
+                                <td class="table__data-td">{{item.item.EmployeeCode}}</td>
+                                <td class="table__data-td">{{item.item.EmployeeName}}</td>
+                                <ng-container *ngFor="let day of row">
+                                    <td class="table__data-td" (dblclick)="onDoubleClick($event, item, day)">
+                                        <ng-container *ngIf="isEditing; else editTemplate">
+                                            {{ item.kycongchitiet['D' + day] }}
+                                        </ng-container>
+                                    
+                                        <ng-template #editTemplate>
+                                            <input [(ngModel)]="item.kycongchitiet['D' + day]"  (blur)="onBlur($event, item, day)" />
+                                        </ng-template>
+                                    </td>
+                                </ng-container>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+            </div>
+        </div>
+    </section>
+</div>
+<!-- end: content -->

@@ -24,8 +24,12 @@ export class DepartmentComponent implements OnInit {
     message: string | null = null;
     searchKeyWord: string | null = null;
 
+    pageSize = 10;
+    pageIndex = 1;
+    totalPages = 1;
+
     ngOnInit(): void {
-        this.getAllDepartment();
+        this.getPageData();
     }
 
     //Show Modal
@@ -81,6 +85,23 @@ export class DepartmentComponent implements OnInit {
         })
     }
 
+    getPageData() {
+        this.departmentService.getPageData(this.pageSize, this.pageIndex).subscribe((response) => {
+            this.dataDepartment = response.data;
+            this.totalPages = Math.ceil(this.dataDepartment.total / this.pageSize);            
+        },
+        (error) => {
+            console.error('Error loading data:', error);
+        })
+        
+    }
+
+    onPageChange(newPageIndex: number): void {
+        this.pageIndex = newPageIndex;
+        this.getPageData();
+      
+    }
+
     //call api get by id
     getById(Id: number){
         this.departmentService.getById(Id).subscribe(res => {
@@ -113,7 +134,7 @@ export class DepartmentComponent implements OnInit {
         
         this.departmentService.postDepartment(body).subscribe((res) => {
             this.closeModalDepartment();
-            this.getAllDepartment();
+            this.getPageData();
         }, (error) => {
             if(error.error){
                 this.showConfirmDialog('error')
@@ -133,7 +154,7 @@ export class DepartmentComponent implements OnInit {
         let id = this.fomartDataApiId.Id;
         
         this.departmentService.putDepartment(id, body).subscribe((res) => {
-            this.getAllDepartment();            
+            this.getPageData();            
         }, (err) => {
             if(err.error){
                 this.showConfirmDialog('error')
@@ -154,7 +175,7 @@ export class DepartmentComponent implements OnInit {
     deleteConfirm() {        
         this.departmentService.delelte(this.departmentIdDelete).subscribe((res) => {
             if(res.message == "success"){
-                this.getAllDepartment();
+                this.getPageData();
                 this.closeConfirmDialog();
             }
         }, (err) => {
@@ -173,7 +194,7 @@ export class DepartmentComponent implements OnInit {
         formData.append('file', files[0]);
         
         this.departmentService.importDepartment(formData).subscribe((res) => {
-            this.getAllDepartment();
+            this.getPageData();
         });
     }
 

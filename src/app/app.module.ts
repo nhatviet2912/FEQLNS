@@ -13,6 +13,13 @@ import { DashboardComponent } from './admin/components/dashboard/dashboard.compo
 import { DepartmentComponent } from './admin/components/department/department.component';
 import { PositionComponent } from './admin/components/position/position.component';
 import { EmployeeComponent } from './admin/components/employee/employee.component';
+import { AttendancesComponent } from './admin/components/attendances/attendances.component';
+import { ContractComponent } from './admin/components/contract/contract.component';
+import { MarvelComponent } from './admin/components/marvel/marvel.component';
+import { MarveldetailsComponent } from './admin/components/marveldetails/marveldetails.component';
+import { GetattendancesComponent } from './admin/components/getattendances/getattendances.component';
+import { SalaryComponent } from './admin/components/salary/salary.component';
+import { NgxPaginationModule } from 'ngx-pagination';
 
 @NgModule({
   declarations: [
@@ -24,12 +31,19 @@ import { EmployeeComponent } from './admin/components/employee/employee.componen
     DepartmentComponent,
     PositionComponent,
     EmployeeComponent,
+    AttendancesComponent,
+    ContractComponent,
+    MarvelComponent,
+    MarveldetailsComponent,
+    GetattendancesComponent,
+    SalaryComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     FormsModule,
     HttpClientModule,
+    NgxPaginationModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

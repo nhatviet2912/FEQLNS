@@ -1,0 +1,74 @@
+<!-- begin: content -->
+<div class="main-content">
+    <!-- <div class="page__title">
+        <h4>QUẢN LÝ CHỨC VỤ</h4>
+    </div> -->
+
+    <section class="firts-section">
+        <div class="training">
+            <div class="table__card">
+                <div class="manager__container" style="justify-content: space-between;">
+                    <div class="add__btn">
+                        <!-- <a class="btn btn--success" (click) ="showModal('create')"><i class="fa-solid fa-plus"></i>Thêm Chức vụ</a> -->
+                    </div>
+                    <!-- <div class="add__btn" >
+                        <input #fileInput type="file" name="file " id="file" (change)="handleFileInput($event)" style="display: none">
+                        <a (click)="fileInput.click()" class="btn btn--success" style="margin-right: 24px;"><i class="fa-solid fa-plus"></i>Import File</a>
+                        <a class="btn btn--success" (click) ="export()"><i class="fa-solid fa-plus"></i>Export File</a>
+                    </div> -->
+                </div>
+
+                <div class="manager__container control-data">
+                    <div class="select__data-lenght">
+                        <label>Hiển thị 
+                            <select class="form-control">
+                                <option value="10">10</option>
+                                <option value="25">25</option>
+                                <option value="50">50</option>
+                                <option value="100">100</option>
+                            </select> bản ghi
+                        </label>
+                    </div>
+
+                    <div class="filter__data">
+                        <label>Tìm kiếm:
+                            <!-- <input type="search" class="form-control" name="searchKeyWord" [(ngModel)]="searchKeyWord" (change)="search()" placeholder="" aria-controls="DataTables_Table_0"> -->
+                        </label>
+                    </div>
+                </div>
+
+                <div class="manager__container table-data">
+                    <table class="table table__data">
+                        <thead>
+                            <tr class="table__data-tr">
+                                <th class="table__data-th obj__id" rowspan="1" colspan="1">Tháng</th>
+                                <th class="table__data-th obj__name" rowspan="1" colspan="1">Năm</th>
+                                <!-- <th class="table__data-th obj__des" rowspan="1" colspan="1">Ngày tính lương</th> -->
+                                <!-- <th class="table__data-th obj__des" rowspan="1" colspan="1">Ngày làm việc trong tháng</th> -->
+                                <th class="table__data-th obj__act" rowspan="1" colspan="1">Thao tác</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let item of data.data" class="table__data-tr">
+                                <td class="table__data-td">{{item.Month}}</td>
+                                <td class="table__data-td">{{item.Year}}</td>
+                                <!-- <td class="table__data-td">{{formatDate(item.DaysWorkedInMonthCount)}}</td> -->
+                                <!-- <td class="table__data-td">{{item.WorkDayInMonth}}</td> -->
+                                <td class="table__data-td">
+                                    <button class="edit__btn" title="Chấm công" (click)="editMarvelDetails(item.Month, item.Year)" style="background-color: transparent; border: none;"><i class="table__icon table__icon-edit fas fa-pen"></i></button>
+                                    <button class="edit__btn" title="Bảng lương" (click)="salary(item.Month, item.Year)" style="background-color: transparent; border: none;"><i class="table__icon table__icon-edit fas fa-sack-dollar"></i></button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="pagination">
+                    <button class="page-btn" [disabled]="pageIndex === 1" (click)="onPageChange(pageIndex - 1)">Previous</button>
+                    <span class="page-info">{{pageIndex}} / {{totalPages}}</span>
+                    <button class="page-btn" [disabled]="pageIndex === totalPages" (click)="onPageChange(pageIndex + 1)">Next</button>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+<!-- end: content -->

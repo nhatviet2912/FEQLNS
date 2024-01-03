@@ -28,8 +28,12 @@ export class PositionComponent implements OnInit{
     dropdown: any = [];
     Department_id: any;
 
+    pageSize = 10;
+    pageIndex = 1;
+    totalPages = 1;
+
     ngOnInit(): void {
-        this.getAll();
+        this.getPageData();
     }
 
     
@@ -88,6 +92,23 @@ export class PositionComponent implements OnInit{
         })
     }
 
+    getPageData() {
+        this.positionService.getPageData(this.pageSize, this.pageIndex).subscribe((response) => {
+            this.data = response.data;
+            this.totalPages = Math.ceil(this.data.total / this.pageSize);            
+        },
+        (error) => {
+            console.error('Error loading data:', error);
+        })
+        
+    }
+
+    onPageChange(newPageIndex: number): void {
+        this.pageIndex = newPageIndex;
+        this.getPageData();
+      
+    }
+
     //call api get by id
     getById(Id: number){
         this.positionService.getById(Id).subscribe(res => {
@@ -121,7 +142,7 @@ export class PositionComponent implements OnInit{
         
         this.positionService.postPosition(body).subscribe((res) => {
             this.closeModal();
-            this.getAll();
+            this.getPageData();
         }, (error) => {
             if(error.error){
                 this.showConfirmDialog('error')
@@ -143,7 +164,7 @@ export class PositionComponent implements OnInit{
         let id = this.fomartDataApiId.Id;
         
         this.positionService.putPosition(id, body).subscribe((res) => {
-            this.getAll();            
+            this.getPageData();            
         }, (err) => {
             if(err.error){
                 this.showConfirmDialog('error')
@@ -164,7 +185,7 @@ export class PositionComponent implements OnInit{
     deleteConfirm() {        
         this.positionService.delete(this.IdDelete).subscribe((res) => {
             if(res.message == "success"){
-                this.getAll();
+                this.getPageData();
                 this.closeConfirmDialog();
             }
         }, (err) => {
@@ -183,7 +204,7 @@ export class PositionComponent implements OnInit{
         formData.append('file', files[0]);
         
         this.positionService.importPosition(formData).subscribe((res) => {
-            this.getAll();
+            this.getPageData();
         });
     }
 

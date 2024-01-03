@@ -49,7 +49,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr *ngFor="let item of fomartDataApi" class="table__data-tr">
+                            <tr *ngFor="let item of data.data" class="table__data-tr">
                                 <td class="table__data-td">{{item.PositionCode}}</td>
                                 <td class="table__data-td">{{item.PositionName}}</td>
                                 <td class="table__data-td">{{item.DepartmentName}}</td>
@@ -61,6 +61,11 @@
                             </tr>
                         </tbody>
                     </table>
+                </div>
+                <div class="pagination">
+                    <button class="page-btn" [disabled]="pageIndex === 1" (click)="onPageChange(pageIndex - 1)">Previous</button>
+                    <span class="page-info">{{pageIndex}} / {{totalPages}}</span>
+                    <button class="page-btn" [disabled]="pageIndex === totalPages" (click)="onPageChange(pageIndex + 1)">Next</button>
                 </div>
             </div>
         </div>

@@ -1,7 +1,7 @@
 <!-- begin: content -->
 <div class="main-content">
     <div class="page__title">
-        <h4>QUẢN LÝ NHÂN VIÊN</h4>
+        <h4>QUẢN LÝ Hợp Đồng</h4>
     </div>
 
     <section class="firts-section">
@@ -9,7 +9,7 @@
             <div class="table__card">
                 <div class="manager__container" style="justify-content: space-between;">
                     <div class="add__btn">
-                        <a class="btn btn--success" (click) ="showModal('create')"><i class="fa-solid fa-plus"></i>Thêm nhân viên</a>
+                        <a class="btn btn--success" (click) ="showModal('create')"><i class="fa-solid fa-plus"></i>Thêm hợp đồng</a>
                     </div>
                     <div class="add__btn" >
                         <input #fileInput type="file" name="file " id="file" (change)="handleFileInput($event)" style="display: none">
@@ -41,30 +41,34 @@
                     <table class="table table__data">
                         <thead>
                             <tr class="table__data-tr">
-                                <th class="table__data-th obj__id" rowspan="1" colspan="1">Mã nhân viên</th>
+                                <th class="table__data-th">STT</th>
+                                <th class="table__data-th obj__id" rowspan="1" colspan="1">Mã hợp đồng</th>
+                                <th class="table__data-th obj__name" rowspan="1" colspan="1" style="min-width: 250px;">Tên hợp đồng</th>
+                                <th class="table__data-th obj__name" rowspan="1" colspan="1">Ngày ký hợp đồng</th>
+                                <th class="table__data-th obj__name" rowspan="1" colspan="1">Ngày kết thúc hợp đồng</th>
+                                <th class="table__data-th obj__name" rowspan="1" colspan="1">Thời hạn</th>
+                                <th class="table__data-th obj__name" rowspan="1" colspan="1">Mã nhân viên</th>
                                 <th class="table__data-th obj__name" rowspan="1" colspan="1">Tên nhân viên</th>
-                                <th class="table__data-th obj__name" rowspan="1" colspan="1">Ngày sinh</th>
-                                <th class="table__data-th obj__name" rowspan="1" colspan="1">Giới tính</th>
-                                <th class="table__data-th obj__name" rowspan="1" colspan="1">Email</th>
-                                <th class="table__data-th obj__name" rowspan="1" colspan="1">Số điện thoại</th>
-                                <th class="table__data-th obj__des" rowspan="1" colspan="1">Địa chỉ</th>
-                                <th class="table__data-th obj__des" rowspan="1" colspan="1" style="min-width: 280px;">Chức vụ</th>
-                                <th class="table__data-th obj__act" rowspan="1" colspan="1" >Thao tác</th>
+                                <th class="table__data-th obj__des" rowspan="1" colspan="1">Hệ số lương</th>
+                                <th class="table__data-th obj__des" rowspan="1" colspan="1">Lương cơ bản</th>
+                                <th class="table__data-th obj__act" rowspan="1" colspan="1">Thao tác</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr *ngFor="let item of data.data" class="table__data-tr" (dblclick)="editModal(item.Id)">
+                            <tr *ngFor="let item of data.data; let i = index" class="table__data-tr" (dblclick) ="editContract(item.Id)">
+                                <td class="table__data-td">{{i +1}}</td>
+                                <td class="table__data-td">{{item.ContractCode}}</td>
+                                <td class="table__data-td">{{item.ContractName}}</td>
+                                <td class="table__data-td">{{formatDate(item.ContractStartDate)}}</td>
+                                <td class="table__data-td">{{formatDate(item.ContractEndDate)}}</td>
+                                <td class="table__data-td">{{item.ContractTerm}} tháng</td>
                                 <td class="table__data-td">{{item.EmployeeCode}}</td>
                                 <td class="table__data-td">{{item.EmployeeName}}</td>
-                                <td class="table__data-td">{{formatDate(item.DateOfBirth)}}</td>
-                                <td class="table__data-td">{{formatGender(item.Gender)}}</td>
-                                <td class="table__data-td">{{item.Email}}</td>
-                                <td class="table__data-td">{{item.PhoneNumber}}</td>
-                                <td class="table__data-td">{{item.Address}}</td>
-                                <td class="table__data-td">{{item.PositionName}}</td>
+                                <td class="table__data-td">{{item.SalaryCoefficient}}</td>
+                                <td class="table__data-td">{{item.SalaryBasic | currency:'VND':'symbol':'1.0-0'}}</td>
                                 <td class="table__data-td">
-                                    <button class="edit__btn"  (click) ="editModal(item.Id)" style="background-color: transparent; border: none;"><i class="table__icon table__icon-edit fas fa-pen"></i></button>
-                                    <a class="delete__btn"  (click) ="delete(item.Id, item.EmployeeCode)"><i class="table__icon table__icon-delete fas fa-trash"></i></a>
+                                    <button class="edit__btn" (click)="editContract(item.Id)" style="background-color: transparent; border: none;"><i class="table__icon table__icon-edit fas fa-pen"></i></button>
+                                    <a class="delete__btn" (click) ="delete(item.Id, item.ContractCode)"><i class="table__icon table__icon-delete fas fa-trash"></i></a>
                                 </td>
                             </tr>
                         </tbody>
@@ -87,7 +91,7 @@
     <div class="manager__modal-content" style="overflow: auto;">
         <div class="manager__container modal__header">
             <div class="manager__modal-title">
-                <h5>Nhập Thông Tin Nhân Viên</h5>
+                <h5>Nhập Thông Tin Hợp Đồng</h5>
             </div>
 
             <div class="manager__modal-close" (click) = "closeModal()">
@@ -99,41 +103,38 @@
             <form class="form" action="#" >
                 <ng-container *ngIf="modalType === 'create'; else updateContent">
                     <div class="form__item">
-                        <label class="form__label">Mã nhân viên</label>
-                        <input type="text" class="form__input " name="EmployeeCode" required  [(ngModel)]="EmployeeCode">
+                        <label class="form__label">Mã hợp đồng</label>
+                        <input type="text" class="form__input " name="ContractCode" required  [(ngModel)]="ContractCode">
                     </div>
                     <div class="form__item">
-                        <label class="form__label">Tên nhân viên</label>
-                        <input type="text" class="form__input form__input-name" name="EmployeeName"  [(ngModel)]="EmployeeName">
+                        <label class="form__label">Tên hợp đồng</label>
+                        <input type="text" class="form__input form__input-name" name="ContractName"  [(ngModel)]="ContractName">
                     </div>
                     <div class="form__item">
-                        <label class="form__label">Ngày sinh</label>
-                        <input type="date" class="form__input form__input-desc form__input--desc" name="DateOfBirth"  [(ngModel)]="DateOfBirth">
+                        <label class="form__label">Ngày ký hợp đồng</label>
+                        <input type="date" class="form__input form__input-desc form__input--desc" name="ContractStartDate"  [(ngModel)]="ContractStartDate">
                     </div>
                     <div class="form__item">
-                        <label class="form__label">Giới tính</label>
-                        <select class="form__input form__input-desc form__input--desc" name="Gender"   [(ngModel)]="Gender">
-                            <option value="0">Nữ</option>
-                            <option value="1">Nam</option>                       
-                        </select>
+                        <label class="form__label">Ngày kết thúc hợp đồng</label>
+                        <input type="date" class="form__input form__input-desc form__input--desc" name="ContractEndDate"  [(ngModel)]="ContractEndDate">
                     </div>
                     <div class="form__item">
-                        <label class="form__label">Email</label>
-                        <input type="text" class="form__input form__input-desc form__input--desc" name="Email" [(ngModel)]="Email">
+                        <label class="form__label">Thời hạn</label>
+                        <input type="text" class="form__input form__input-desc form__input--desc" name="ContractTerm" [(ngModel)]="ContractTerm">
                     </div>
                     <div class="form__item">
-                        <label class="form__label">Số điện thoại</label>
-                        <input type="text" class="form__input form__input-desc form__input--desc" name="PhoneNumber" [(ngModel)]="PhoneNumber">
+                        <label class="form__label">Hệ số lương</label>
+                        <input type="text" class="form__input form__input-desc form__input--desc" name="SalaryCoefficient" [(ngModel)]="SalaryCoefficient">
                     </div>
                     <div class="form__item">
-                        <label class="form__label">Địa chỉ</label>
-                        <input type="text" class="form__input form__input-desc form__input--desc" name="Address" [(ngModel)]="Address">
+                        <label class="form__label">Lương cơ bản</label>
+                        <input type="text" class="form__input form__input-desc form__input--desc" name="SalaryBasic" [(ngModel)]="SalaryBasic">
                     </div>
                     <div class="form__item">
-                        <label class="form__label">Chức vụ</label>
-                        <select class="form__input form__input-desc form__input--desc" name="Position_id" [(ngModel)]="Position_id">
-                            <option class="input__select-value form__input-select" selected>Vui lòng chọn chứ vụ</option>
-                            <option *ngFor="let item of dataDropdown" [value]="item.Id">{{ item.PositionName }}</option>                       
+                        <label class="form__label">Nhân viên</label>
+                        <select class="form__input form__input-desc form__input--desc" name="Contract_Employee_id" [(ngModel)]="Contract_Employee_id">
+                            <option class="input__select-value form__input-select" selected>Vui lòng chọn nhân viên</option>
+                            <option *ngFor="let item of dataDropdown" [value]="item.Id">{{ item.EmployeeName }}</option>                       
                         </select>
                     </div>
 
@@ -141,40 +142,37 @@
                 <ng-template #updateContent>
                     <div class="form__item">
                         <label class="form__label">Mã nhân viên</label>
-                        <input type="text" class="form__input " name="EmployeeCode" required  [(ngModel)]="fomartDataApiId.EmployeeCode">
+                        <input type="text" class="form__input " name="ContractCode" required  [(ngModel)]="fomartDataApiId.ContractCode">
                     </div>
                     <div class="form__item">
                         <label class="form__label">Tên nhân viên</label>
-                        <input type="text" class="form__input form__input-name" name="EmployeeName"  [(ngModel)]="fomartDataApiId.EmployeeName">
+                        <input type="text" class="form__input form__input-name" name="ContractName"  [(ngModel)]="fomartDataApiId.ContractName">
                     </div>
                     <div class="form__item">
-                        <label class="form__label">Ngày sinh</label>
-                        <input type="date" class="form__input form__input-desc form__input--desc" name="DateOfBirth"  [(ngModel)]="fomartDataApiId.DateOfBirth">
+                        <label class="form__label">Ngày ký hợp đồng</label>
+                        <input type="date" class="form__input form__input-desc form__input--desc" name="ContractStartDate"  [(ngModel)]="fomartDataApiId.ContractStartDate">
                     </div>
                     <div class="form__item">
-                        <label class="form__label">Giới tính</label>
-                        <select class="form__input form__input-desc form__input--desc" name="Gender"   [(ngModel)]="fomartDataApiId.Gender">
-                            <option value="0">Nữ</option>
-                            <option value="1">Nam</option>                       
-                        </select>
+                        <label class="form__label">Ngày kết thúc hợp đồng</label>
+                        <input type="date" class="form__input form__input-desc form__input--desc" name="ContractEndDate"  [(ngModel)]="fomartDataApiId.ContractEndDate">
                     </div>
                     <div class="form__item">
-                        <label class="form__label">Email</label>
-                        <input type="text" class="form__input form__input-desc form__input--desc" name="Email" [(ngModel)]="fomartDataApiId.Email">
+                        <label class="form__label">Thời hạn</label>
+                        <input type="text" class="form__input form__input-desc form__input--desc" name="ContractTerm" [(ngModel)]="fomartDataApiId.ContractTerm">
                     </div>
                     <div class="form__item">
-                        <label class="form__label">Số điện thoại</label>
-                        <input type="text" class="form__input form__input-desc form__input--desc" name="PhoneNumber" [(ngModel)]="fomartDataApiId.PhoneNumber">
+                        <label class="form__label">Hệ số lương</label>
+                        <input type="text" class="form__input form__input-desc form__input--desc" name="SalaryCoefficient" [(ngModel)]="fomartDataApiId.SalaryCoefficient">
                     </div>
                     <div class="form__item">
-                        <label class="form__label">Địa chỉ</label>
-                        <input type="text" class="form__input form__input-desc form__input--desc" name="Address" [(ngModel)]="fomartDataApiId.Address">
+                        <label class="form__label">Lương cơ bản</label>
+                        <input type="text" class="form__input form__input-desc form__input--desc" name="SalaryBasic" [(ngModel)]="fomartDataApiId.SalaryBasic">
                     </div>
                     <div class="form__item">
-                        <label class="form__label">Chức vụ</label>
-                        <select class="form__input form__input-desc form__input--desc" name="Position_id" [(ngModel)]="fomartDataApiId.Position_id">
-                            <option class="input__select-value form__input-select" selected>Vui lòng chọn chứ vụ</option>
-                            <option *ngFor="let item of dataDropdown" [value]="item.Id">{{ item.PositionName }}</option>                       
+                        <label class="form__label">Nhân viên</label>
+                        <select class="form__input form__input-desc form__input--desc" name="Contract_Employee_id" [(ngModel)]="fomartDataApiId.Contract_Employee_id">
+                            <option class="input__select-value form__input-select" selected>Vui lòng chọn nhân viên</option>
+                            <option *ngFor="let item of dataDropdown" [value]="item.Id">{{ item.EmployeeName }}</option>                       
                         </select>
                     </div>
                 </ng-template>
@@ -206,7 +204,7 @@
 
         <ng-container *ngIf="modelTypeMessage === 'delete'; else deleteContent">
             <div class="manager__container alert__body">
-                <h6>Bạn có chức muốn xóa thông tin nhân viên có mã <span class="get-id-del">{{ code }}</span> khỏi hệ thống?</h6>
+                <h6>Bạn có chức muốn xóa thông tin hợp đồng có mã <span class="get-id-del">{{ code }}</span> khỏi hệ thống?</h6>
                 <div class="alert__btn manager_btn-confirm" >
                     <button class="btn btn--error btn__agree" type="submit" (click)="deleteConfirm()">Xác nhận</button>
                     <button class="btn btn--muted btn__skip" type="submit" (click) = closeConfirmDialog()>Bỏ qua</button>
@@ -225,6 +223,8 @@
     </div>
 </div>
 <!-- end: alert-delete -->
+
+
 
 
 

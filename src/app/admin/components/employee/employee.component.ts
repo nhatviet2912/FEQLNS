@@ -35,8 +35,12 @@ export class EmployeeComponent implements OnInit {
     dropdown: any = [];
     Position_id: any;
 
+    pageSize = 10;
+    pageIndex = 1;
+    totalPages = 1;
+
     ngOnInit(): void {
-        this.getAll();
+        this.getPageData();
     }
 
     @HostListener('document:keydown.escape', ['$event']) onKeydownHandler(event: KeyboardEvent) {
@@ -101,6 +105,25 @@ export class EmployeeComponent implements OnInit {
         })
     }
 
+    getPageData() {
+        this.employeeService.getPageData(this.pageSize, this.pageIndex).subscribe((response) => {
+            this.data = response.data;
+            console.log(this.data);
+            
+            this.totalPages = Math.ceil(this.data.total / this.pageSize);            
+        },
+        (error) => {
+            console.error('Error loading data:', error);
+        })
+        
+    }
+
+    onPageChange(newPageIndex: number): void {
+        this.pageIndex = newPageIndex;
+        this.getPageData();
+      
+    }
+
     //call api get by id
     getById(Id: number){
         this.employeeService.getById(Id).subscribe(res => {
@@ -140,7 +163,7 @@ export class EmployeeComponent implements OnInit {
              
         this.employeeService.post(body).subscribe((res) => {
             this.closeModal();
-            this.getAll();
+            this.getPageData();
         }, (error) => {
             if(error.error){
                 this.showConfirmDialog('error')
@@ -165,7 +188,7 @@ export class EmployeeComponent implements OnInit {
         let id = this.fomartDataApiId.Id;
         
         this.employeeService.put(id, body).subscribe((res) => {
-            this.getAll();            
+            this.getPageData();            
         }, (err) => {
             if(err.error){
                 this.showConfirmDialog('error')
@@ -187,7 +210,7 @@ export class EmployeeComponent implements OnInit {
     deleteConfirm() {        
         this.employeeService.delete(this.IdDelete).subscribe((res) => {
             if(res.message == "success"){
-                this.getAll();
+                this.getPageData();
                 this.closeConfirmDialog();
             }
         }, (err) => {
@@ -205,7 +228,7 @@ export class EmployeeComponent implements OnInit {
         formData.append('file', files[0]);
         
         this.employeeService.import(formData).subscribe((res) => {
-            this.getAll();
+            this.getPageData();
         });
     }
 

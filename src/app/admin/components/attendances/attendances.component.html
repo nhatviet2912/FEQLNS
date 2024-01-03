@@ -1,0 +1,108 @@
+<div class="main-content">
+    <div class="page__title">
+        <h4>QUẢN LÝ CHẤM CÔNG</h4>
+    </div>
+
+    <section class="firts-section">
+        <div class="training">
+            <div class="table__card">
+                <div class="manager__container" style="justify-content: space-between;">
+                    <div class="add__btn">
+                        <a class="btn btn--success" (click) = "save()"><i class="fa-solid fa-plus"></i>Lưu chấm công</a>
+                    </div>
+                    <!-- <div class="add__btn" >
+                        <input #fileInput type="file" name="file " id="file" (change)="handleFileInput($event)" style="display: none">
+                        <a (click)="fileInput.click()" class="btn btn--success" style="margin-right: 24px;"><i class="fa-solid fa-plus"></i>Import File</a>
+                        <a class="btn btn--success" (click) ="exportDepartment()"><i class="fa-solid fa-plus"></i>Export File</a>
+                    </div> -->
+                </div>
+
+                <div class="manager__container control-data">
+                    <div class="select__data-lenght">
+                        <label>Hiển thị 
+                            <select class="form-control">
+                                <option value="10">10</option>
+                                <option value="25">25</option>
+                                <option value="50">50</option>
+                                <option value="100">100</option>
+                            </select> bản ghi
+                        </label>
+                    </div>
+
+                    <div class="filter__data">
+                        <label>Tìm kiếm:
+                            <input type="search" class="form-control" name="searchKeyWord" placeholder="" aria-controls="DataTables_Table_0">
+                        </label>
+                    </div>
+                </div>
+
+                <div class="manager__container table-data">
+                    <table class="table table__data">
+                        <thead>
+                            <tr class="table__data-tr">
+                                <th class="table__data-th obj__id" rowspan="1" colspan="1">STT</th>
+                                <th class="table__data-th obj__id" rowspan="1" colspan="1">Mã Nhân Viên</th>
+                                <th class="table__data-th obj__name" rowspan="1" colspan="1">Tên Nhân Viên</th>
+                                <th class="table__data-th obj__des" rowspan="1" colspan="1">Giới Tính</th>
+                                <th class="table__data-th obj__act" rowspan="1" colspan="1">Email</th>
+                                <th class="table__data-th obj__act" rowspan="1" colspan="1">Chức vụ</th>
+                                <th class="table__data-th obj__act" rowspan="1" colspan="1">Trạng thái</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let item of data.data; let i = index" class="table__data-tr" >
+                                <td>{{i+1}}</td>
+                                <td class="table__data-td">{{item.EmployeeCode}}</td>
+                                <td class="table__data-td">{{item.EmployeeName}}</td>
+                                <td class="table__data-td">{{formatGender(item.Gender)}}</td>
+                                <td class="table__data-td">{{item.Email}}</td>
+                                <td class="table__data-td">{{item.PositionName}}</td>
+                                <td class="table__data-td">
+                                    <select id="select_{{item.Id}}" >
+                                        <option value=""></option>
+                                        <option value="0">Vắng</option>
+                                        <option value="1">Không</option>
+                                    </select>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="pagination">
+                    <button class="page-btn" [disabled]="pageIndex === 1" (click)="onPageChange(pageIndex - 1)">Previous</button>
+                    <span class="page-info">{{pageIndex}} / {{totalPages}}</span>
+                    <button class="page-btn" [disabled]="pageIndex === totalPages" (click)="onPageChange(pageIndex + 1)">Next</button>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+<!-- end: content -->
+
+
+<!-- begin: alert-delete -->
+<div class="manager__alert" >
+    <div class="manager__alert-content" >
+        <div class="manager__container modal__header">
+            <div class="manager__modal-title">
+                <h5>THÔNG BÁO</h5>
+            </div>
+
+            <div class="manager__modal-close">
+                <i class="fas fa-times" (click)="closeConfirmDialog()"></i>
+            </div>
+        </div>
+
+        
+        <div class="manager__container alert__body">
+            <h6>{{ messageData }}</h6>
+            <div class="alert__btn manager_btn-confirm" >
+                <button class="btn btn--error btn__agree" (click) ="closeConfirmDialog()">Xác nhận</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+<!-- end: alert-delete -->
+
+

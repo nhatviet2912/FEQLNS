@@ -1,4 +1,4 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
@@ -13,6 +13,14 @@ export class DepartmentService {
 
 	getList() : Observable<any[]> {
 		return this.http.get<any>(`${this.baseURL}/department`);
+	}
+
+	getPageData(pageSize: number, pageIndex: number): Observable<any> {
+		const params = new HttpParams()
+		  .set('pagesize', pageSize.toString())
+		  .set('pageindex', pageIndex.toString());
+	
+		return this.http.get<any>(`${this.baseURL}/department/getPageData`, { params });
 	}
 
 	getById(id : number) : Observable<any> {

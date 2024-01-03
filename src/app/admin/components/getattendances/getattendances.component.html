@@ -1,0 +1,113 @@
+<div class="main-content">
+    <div class="page__title">
+        <h4>QUẢN LÝ CHẤM CÔNG</h4>
+    </div>
+
+    <section class="firts-section">
+        <div class="training">
+            <div class="table__card">
+                <div class="manager__container" style="justify-content: space-between;">
+                    <div class="add__btn">
+                        <!-- <a class="btn btn--success" (click) = "save()"><i class="fa-solid fa-plus"></i>Lưu chấm công</a> -->
+                    </div>
+                    <!-- <div class="add__btn" >
+                        <input #fileInput type="file" name="file " id="file" (change)="handleFileInput($event)" style="display: none">
+                        <a (click)="fileInput.click()" class="btn btn--success" style="margin-right: 24px;"><i class="fa-solid fa-plus"></i>Import File</a>
+                        <a class="btn btn--success" (click) ="exportDepartment()"><i class="fa-solid fa-plus"></i>Export File</a>
+                    </div> -->
+                </div>
+
+                <div class="manager__container control-data">
+                    <form class="manager__container control-data" id="formsearch">
+                        <div class="select__data-lenght">
+                            <label>Chọn ngày
+                                <select class="form-control" name="Day" [(ngModel)] ="Day">
+                                    <option *ngFor="let day of days" [value]="day">{{ day }}</option>
+
+                                </select>
+                            </label>
+                        </div>
+                        <div class="select__data-lenght">
+                            <label>Chọn tháng
+                                <select class="form-control" name="Month" [(ngModel)] ="Month">
+                                    <option *ngFor="let month of months" [value]="month">{{ month }}</option>
+                                </select>
+                            </label>
+                        </div>
+                        <div class="select__data-lenght">
+                            <label>Chọn năm
+                                <select class="form-control" name="Year" [(ngModel)] ="Year">
+                                    <option value="2023">2023</option>
+                                    <option value="2024">2024</option>
+                                </select>
+                            </label>
+                        </div>
+                        <div class="filter__data">
+                            <button (click)="getData()" class="btn btn--primary">Tìm kiếm</button>
+                        </div>
+                    </form>
+
+                    <div class="filter__data" *ngIf="hidden">
+                        <button (click)="tinhluong()" class="btn btn--primary" >Tính lương</button>
+                    </div>
+                    
+                </div>
+
+                <div class="manager__container table-data">
+                    <table class="table table__data">
+                        <thead>
+                            <tr class="table__data-tr">
+                                <th class="table__data-th obj__id" rowspan="1" colspan="1">STT</th>
+                                <th class="table__data-th obj__id" rowspan="1" colspan="1">Mã Nhân Viên</th>
+                                <th class="table__data-th obj__name" rowspan="1" colspan="1">Tên Nhân Viên</th>
+                                <th class="table__data-th obj__act" rowspan="1" colspan="1">Email</th>
+                                <th class="table__data-th obj__act" rowspan="1" colspan="1">Chức vụ</th>
+                                <ng-container *ngIf="hidden; else block">
+                                    <th class="table__data-th obj__act" rowspan="1" colspan="1">Số công trong tháng</th>
+                                    
+                                </ng-container>
+                                <ng-template #block>
+                                    <th class="table__data-th obj__act" rowspan="1" colspan="1">Trạng thái</th>
+
+                                </ng-template>
+                                
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <ng-container *ngIf="hidden; else displayAbsentCount">
+                                <tr *ngFor="let item of data | paginate: { itemsPerPage: 10, currentPage: p }; let i = index" class="table__data-tr" >
+                                    <td>{{i+1}}</td>
+                                    <td class="table__data-td">{{item.EmployeeCode}}</td>
+                                    <td class="table__data-td">{{item.EmployeeName}}</td>
+                                    <td class="table__data-td">{{item.Email}}</td>
+                                    <td class="table__data-td">{{item.PositionName}}</td>
+                                    <td class="table__data-td">{{ item.AbsentCount }}</td>
+                                </tr>
+                            </ng-container>
+                            <ng-template #displayAbsentCount>
+                                <tr *ngFor="let item of data | paginate: { itemsPerPage: 10, currentPage: p }; let i = index " class="table__data-tr" >
+                                    <td>{{i+1}}</td>
+                                    <td class="table__data-td">{{item.EmployeeCode}}</td>
+                                    <td class="table__data-td">{{item.EmployeeName}}</td>
+                                    <td class="table__data-td">{{item.Email}}</td>
+                                    <td class="table__data-td">{{item.PositionName}}</td>
+                                    
+                                    <td class="table__data-td">
+                                        <select [id]="'select_' + item.AttendanceId" name="Absent" [(ngModel)]="item.Absent" style="border:none; outline: none;">
+                                            <option value=""></option>
+                                            <option [value]="0">Vắng</option>
+                                            <option [value]="1">Không</option>
+                                        </select>
+                                    </td>
+                                </tr>
+                            </ng-template>
+                            
+                        </tbody>
+                    </table>
+                </div>
+                <pagination-controls (pageChange)="p = $event"></pagination-controls>
+            </div>
+        </div>
+    </section>
+</div>
+<!-- end: content -->

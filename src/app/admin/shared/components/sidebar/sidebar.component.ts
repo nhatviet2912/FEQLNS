@@ -11,22 +11,38 @@ export class SidebarComponent {
         {
             path: '/',
             name: 'Tổng quan',
-            icons: "fas fa-chart-pie-alt"
+            icons: "fa-solid fa-chart-pie"
         },
         {
             path: '/department',
             name: 'Quản lý phòng ban',
-            icons: "far fa-city"
+            icons: "fa-solid fa-city"
         },
         {
             path: '/position',
             name: 'Quản lý chức vụ',
-            icons: "far fa-city"
+            icons: "fa-solid fa-graduation-cap"
         },
         {
             path: '/employee',
             name: 'Quản lý nhân viên',
-            icons: "far fa-city"
-        }
+            icons: "fa-solid fa-chalkboard-teacher"
+        },
+        {
+            path: '/marvel',
+            name: 'Quản lý chấm công',
+            icons: "fa-solid fa-calculator"
+        },
+        {
+            path: '/attendances',
+            name: 'Quản lý điểm danh',
+            icons: "fa-solid fa-calendar-alt"
+        },
+        {
+            path: '/contract',
+            name: 'Quản lý hợp đồng',
+            icons: "fa-solid fa-book-open"
+        },
+        
     ]
 }
