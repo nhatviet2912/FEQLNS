@@ -221,7 +221,8 @@ export class PositionComponent implements OnInit{
             KeyWord: this.searchKeyWord
         }
         this.positionService.searchPosition(body).subscribe((res) => {
-            this.fomartDataApi = res.data;
+            
+            this.data = res;
             
         })
     }

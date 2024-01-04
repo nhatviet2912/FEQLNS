@@ -245,7 +245,7 @@ export class EmployeeComponent implements OnInit {
             KeyWord: this.searchKeyWord
         }
         this.employeeService.search(body).subscribe((res) => {            
-            this.fomartDataApi = res.data;
+            this.data = res;
         })
     }
 
